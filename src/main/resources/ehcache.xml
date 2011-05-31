@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.sf.net/ehcache.xsd">
+
+    <!-- Default cache that has to be used -->
+    <defaultCache
+            maxElementsInMemory="100"
+            eternal="false"
+            timeToIdleSeconds="10"
+            timeToLiveSeconds="15"
+            overflowToDisk="false"
+            diskPersistent="false"
+            memoryStoreEvictionPolicy="LRU"
+            />
+
+    <!-- Plan cache, 15min -->
+    <cache name="planCache"
+           maxElementsInMemory="10000"
+           eternal="false"
+           overflowToDisk="false"
+           timeToIdleSeconds="900"
+           timeToLiveSeconds="900"
+           diskPersistent="false"
+           memoryStoreEvictionPolicy="LRU"
+           copyOnRead="true"
+           copyOnWrite="true"
+            />
+
+    <!-- Calendar cache, eternal -->
+    <cache name="calendarCache"
+           maxElementsInMemory="10000"
+           eternal="true"
+           overflowToDisk="false"
+           diskPersistent="false"
+           memoryStoreEvictionPolicy="LRU"
+           copyOnRead="true"
+           copyOnWrite="true"
+            />
+
+</ehcache>

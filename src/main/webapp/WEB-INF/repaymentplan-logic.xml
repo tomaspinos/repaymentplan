@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="Country.CZE" class="cz.repaymentplan.logic.enums.Country" factory-method="valueOf">
+        <constructor-arg value="CZE"/>
+    </bean>
+    <bean id="Country.SVK" class="cz.repaymentplan.logic.enums.Country" factory-method="valueOf">
+        <constructor-arg value="SVK"/>
+    </bean>
+
+    <bean id="workdayChecker" class="cz.repaymentplan.logic.calendar.CompositeWorkdayChecker">
+        <property name="checkers">
+            <list>
+                <bean class="cz.repaymentplan.logic.calendar.StaticWorkdayChecker"/>
+                <bean class="cz.repaymentplan.logic.calendar.DynamicWorkdayChecker">
+                    <property name="ruleMap">
+                        <map>
+                            <entry key-ref="Country.CZE">
+                                <list>
+                                    <bean class="cz.repaymentplan.logic.calendar.rules.SaturdayRule"/>
+                                    <bean class="cz.repaymentplan.logic.calendar.rules.SundayRule"/>
+                                    <bean class="cz.repaymentplan.logic.calendar.rules.EasterMondayRule"/>
+                                </list>
+                            </entry>
+                            <entry key-ref="Country.SVK">
+                                <list>
+                                    <bean class="cz.repaymentplan.logic.calendar.rules.SaturdayRule"/>
+                                    <bean class="cz.repaymentplan.logic.calendar.rules.SundayRule"/>
+                                    <bean class="cz.repaymentplan.logic.calendar.rules.GoodFridayRule"/>
+                                    <bean class="cz.repaymentplan.logic.calendar.rules.EasterMondayRule"/>
+                                </list>
+                            </entry>
+                        </map>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="loanSimulationAlgorithm" class="cz.repaymentplan.logic.LoanSimulationAlgorithm">
+        <property name="workdayChecker" ref="workdayChecker"/>
+    </bean>
+</beans>
