@@ -1,0 +1,30 @@
+<holidays>
+    <country code="CZE">
+        <date>1.1.</date>
+        <date>1.5.</date>
+        <date>8.5.</date>
+        <date>5.7.</date>
+        <date>6.7.</date>
+        <date>28.9.</date>
+        <date>28.10.</date>
+        <date>17.11.</date>
+        <date>24.12.</date>
+        <date>25.12.</date>
+        <date>26.12.</date>
+    </country>
+    <country code="SVK">
+        <date>1.1.</date>
+        <date>6.1.</date>
+        <date>1.5.</date>
+        <date>8.5.</date>
+        <date>5.7.</date>
+        <date>29.8.</date>
+        <date>1.9.</date>
+        <date>15.9.</date>
+        <date>1.11.</date>
+        <date>17.11.</date>
+        <date>24.12.</date>
+        <date>25.12.</date>
+        <date>26.12.</date>
+    </country>
+</holidays>
