@@ -7,16 +7,14 @@ import cz.repaymentplan.logic.enums.Country
 import cz.repaymentplan.logic.enums.PaymentPeriod
 import cz.repaymentplan.logic.enums.InterestCorrectionType
 import cz.repaymentplan.logic.enums.LastPaymentType
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests
-import org.springframework.test.context.ContextConfiguration
+
 import org.springframework.beans.factory.annotation.Autowired
 
 /**
  *
  * @author Tomas Pinos
  */
-@ContextConfiguration(["classpath:repaymentplan-logic.xml"])
-class TestPlans extends AbstractJUnit4SpringContextTests {
+class PlanTest extends AbstractContextTest {
 
     @Autowired
     private LoanSimulationAlgorithm loanSimulationAlgorithm;
@@ -37,16 +35,8 @@ class TestPlans extends AbstractJUnit4SpringContextTests {
         assertSimulation("/plan2.xml", loan)
     }
 
-    @Test
-    void plan3() {
-        def loan = loanSimulationAlgorithm.simulateSimpleLoan(date("23.05.2011"), 24, Country.CZE, new BigDecimal(500000), BigDecimal.TEN, 12,
-                PaymentPeriod.ONE_MONTH, 365, 360, BigDecimal.ZERO, InterestCorrectionType.CEIL, LastPaymentType.LEAST_DIFFERENCE, 5)
-
-        assertSimulation("/plan3.xml", loan)
-    }
-
     def assertSimulation(String resource, LoanSimulation loan) {
-        def plan = new XmlSlurper().parseText(new File(TestPlans.getResource(resource).toURI()).text)
+        def plan = new XmlSlurper().parseText(new File(PlanTest.getResource(resource).toURI()).text)
         def expectedPayments = readPayments(plan.payments)
 
         assertPayments(expectedPayments, loan.paymentList)
@@ -86,23 +76,23 @@ class TestPlans extends AbstractJUnit4SpringContextTests {
                 number(paymentXml.td[5]), number(paymentXml.td[6]), number(paymentXml.td[7]), number(paymentXml.td[8]))
     }
 
-    BigDecimal readRPSN(node) {
+    private static BigDecimal readRPSN(node) {
         number(node)
     }
 
-    DateTime date(node) {
+    private static DateTime date(node) {
         date(node.text())
     }
 
-    DateTime date(String text) {
+    private static DateTime date(String text) {
         new DateTime(Date.parse("dd.MM.yyyy", text))
     }
 
-    BigDecimal number(node) {
+    private static BigDecimal number(node) {
         number(node.text())
     }
 
-    BigDecimal number(String text) {
+    private static BigDecimal number(String text) {
         new BigDecimal(text.replace(" ", "").replace(",", "."))
     }
 }

@@ -240,85 +240,81 @@ public class LoanSimulationAlgorithm {
                                      Integer in_days_in_year,  // pocet dni v roku, povolene hodnoty 365, 365.25, 366 (znamena skutocny pocet dni v roku)
                                      Integer in_precision) {
         // kontrola planov
-        final RPSNCalculationIteration lr_iter_left = new RPSNCalculationIteration();
-        final RPSNCalculationIteration lr_iter_right = new RPSNCalculationIteration();
-        final RPSNCalculationIteration lr_iter_mid = new RPSNCalculationIteration();
-        int ln_steps = 1;
+        final RPSNCalculationIteration left = new RPSNCalculationIteration();
+        final RPSNCalculationIteration right = new RPSNCalculationIteration();
+        final RPSNCalculationIteration mid = new RPSNCalculationIteration();
+
         final Integer ln_days_in_year = in_days_in_year == 366 ? getDayCountInYear(id_start_drawdown) : in_days_in_year;
 
-        lr_iter_mid.drawdown_sum = it_drawdown.getSumAmount();
+        mid.drawdownSum = it_drawdown.getSumAmount();
+        mid.paymentSum = it_payment.getSumPrincipal();
 
-        lr_iter_mid.payment_sum = it_payment.getSumPrincipal();
-
-        if (lr_iter_mid.drawdown_sum == null || lr_iter_mid.payment_sum == null || lr_iter_mid.drawdown_sum.doubleValue() != lr_iter_mid.payment_sum.doubleValue()) {
+        if (mid.drawdownSum == null || mid.paymentSum == null || mid.drawdownSum.doubleValue() != mid.paymentSum.doubleValue()) {
             return null;
         }
         // vypocet RPSN polenim intervalu
-        lr_iter_left.rpsn = BigDecimal.ZERO;
+        left.rpsn = BigDecimal.ZERO;
 
-        lr_iter_left.drawdown_sum = it_drawdown.getSum(new DrawdownExpression() {
+        left.drawdownSum = it_drawdown.getSum(new DrawdownExpression() {
             @Override
             public BigDecimal evaluate(Drawdown drawdown) {
-                return divide(drawdown.amount, power(BigDecimal.ONE.add(lr_iter_left.rpsn), divide(getDiffInDays(drawdown.drawdown_date, id_start_drawdown), ln_days_in_year)));
+                return divide(drawdown.amount, power(BigDecimal.ONE.add(left.rpsn), divide(getDiffInDays(drawdown.drawdown_date, id_start_drawdown), ln_days_in_year)));
             }
         });
-        lr_iter_left.payment_sum = it_payment.getSum(new PaymentExpression() {
+        left.paymentSum = it_payment.getSum(new PaymentExpression() {
             @Override
             public BigDecimal evaluate(Payment payment) {
-                return divide(payment.payment, power(BigDecimal.ONE.add(lr_iter_left.rpsn), divide(getDiffInDays(payment.maturityDate, id_start_drawdown), ln_days_in_year)));
+                return divide(payment.payment, power(BigDecimal.ONE.add(left.rpsn), divide(getDiffInDays(payment.maturityDate, id_start_drawdown), ln_days_in_year)));
             }
         });
 
-        lr_iter_right.rpsn = new BigDecimal(1000); // pocita sa s maximalnou vyskou RPSN. pre normalne sadzby (max desiatky percent) staci startovat od takejto max vysky RPSN
+        right.rpsn = new BigDecimal(1000); // pocita sa s maximalnou vyskou RPSN. pre normalne sadzby (max desiatky percent) staci startovat od takejto max vysky RPSN
 
-        lr_iter_right.drawdown_sum = it_drawdown.getSum(new DrawdownExpression() {
+        right.drawdownSum = it_drawdown.getSum(new DrawdownExpression() {
             @Override
             public BigDecimal evaluate(Drawdown drawdown) {
-                return divide(drawdown.amount, power(BigDecimal.ONE.add(lr_iter_right.rpsn), divide(getDiffInDays(drawdown.drawdown_date, id_start_drawdown), ln_days_in_year)));
+                return divide(drawdown.amount, power(BigDecimal.ONE.add(right.rpsn), divide(getDiffInDays(drawdown.drawdown_date, id_start_drawdown), ln_days_in_year)));
             }
         });
-        lr_iter_right.payment_sum = it_payment.getSum(new PaymentExpression() {
+        right.paymentSum = it_payment.getSum(new PaymentExpression() {
             @Override
             public BigDecimal evaluate(Payment payment) {
-                return divide(payment.payment, power(BigDecimal.ONE.add(lr_iter_right.rpsn), divide(getDiffInDays(payment.maturityDate, id_start_drawdown), ln_days_in_year)));
+                return divide(payment.payment, power(BigDecimal.ONE.add(right.rpsn), divide(getDiffInDays(payment.maturityDate, id_start_drawdown), ln_days_in_year)));
             }
         });
 
-        while (true) {
-            lr_iter_mid.rpsn = divide(lr_iter_left.rpsn.add(lr_iter_right.rpsn), new BigDecimal(2));
-            if (lr_iter_mid.rpsn.setScale(in_precision, BigDecimal.ROUND_HALF_UP).equals(lr_iter_left.rpsn.setScale(in_precision, BigDecimal.ROUND_HALF_UP))
-                    || lr_iter_mid.rpsn.setScale(in_precision, BigDecimal.ROUND_HALF_UP).equals(lr_iter_right.rpsn.setScale(in_precision, BigDecimal.ROUND_HALF_UP))) {
+        for (int ln_steps = 1; ln_steps <= 100; ln_steps++) {
+            mid.rpsn = divide(left.rpsn.add(right.rpsn), new BigDecimal(2));
+            if (mid.rpsn.setScale(in_precision, BigDecimal.ROUND_HALF_UP).equals(left.rpsn.setScale(in_precision, BigDecimal.ROUND_HALF_UP))
+                    || mid.rpsn.setScale(in_precision, BigDecimal.ROUND_HALF_UP).equals(right.rpsn.setScale(in_precision, BigDecimal.ROUND_HALF_UP))) {
                 break;
             }
 
-            lr_iter_mid.drawdown_sum = it_drawdown.getSum(new DrawdownExpression() {
+            mid.drawdownSum = it_drawdown.getSum(new DrawdownExpression() {
                 @Override
                 public BigDecimal evaluate(Drawdown drawdown) {
-                    return divide(drawdown.amount, power(BigDecimal.ONE.add(lr_iter_mid.rpsn), divide(getDiffInDays(drawdown.drawdown_date, id_start_drawdown), ln_days_in_year)));
+                    return divide(drawdown.amount, power(BigDecimal.ONE.add(mid.rpsn), divide(getDiffInDays(drawdown.drawdown_date, id_start_drawdown), ln_days_in_year)));
                 }
             });
-            lr_iter_mid.payment_sum = it_payment.getSum(new PaymentExpression() {
+            mid.paymentSum = it_payment.getSum(new PaymentExpression() {
                 @Override
                 public BigDecimal evaluate(Payment payment) {
-                    return divide(payment.payment, power(BigDecimal.ONE.add(lr_iter_mid.rpsn), divide(getDiffInDays(payment.maturityDate, id_start_drawdown), ln_days_in_year)));
+                    return divide(payment.payment, power(BigDecimal.ONE.add(mid.rpsn), divide(getDiffInDays(payment.maturityDate, id_start_drawdown), ln_days_in_year)));
                 }
             });
 
-            if (isGreaterThanZero(lr_iter_mid.drawdown_sum.subtract(lr_iter_mid.payment_sum)) && isGreaterThanZero(lr_iter_left.drawdown_sum.subtract(lr_iter_left.payment_sum)) ||
-                    isLessOrEqualZero(lr_iter_mid.drawdown_sum.subtract(lr_iter_mid.payment_sum)) && isLessOrEqualZero(lr_iter_left.drawdown_sum.subtract(lr_iter_left.payment_sum))) {
-                lr_iter_left.copy(lr_iter_mid);
-            } else if (isGreaterThanZero(lr_iter_mid.drawdown_sum.subtract(lr_iter_mid.payment_sum)) && isGreaterThanZero(lr_iter_right.drawdown_sum.subtract(lr_iter_right.payment_sum)) ||
-                    isLessOrEqualZero(lr_iter_mid.drawdown_sum.subtract(lr_iter_mid.payment_sum)) && isLessOrEqualZero(lr_iter_right.drawdown_sum.subtract(lr_iter_right.payment_sum))) {
-                lr_iter_right.copy(lr_iter_mid);
+            if (isGreaterThanZero(mid.drawdownSum.subtract(mid.paymentSum)) && isGreaterThanZero(left.drawdownSum.subtract(left.paymentSum)) ||
+                    isLessOrEqualZero(mid.drawdownSum.subtract(mid.paymentSum)) && isLessOrEqualZero(left.drawdownSum.subtract(left.paymentSum))) {
+                left.copy(mid);
+            } else if (isGreaterThanZero(mid.drawdownSum.subtract(mid.paymentSum)) && isGreaterThanZero(right.drawdownSum.subtract(right.paymentSum)) ||
+                    isLessOrEqualZero(mid.drawdownSum.subtract(mid.paymentSum)) && isLessOrEqualZero(right.drawdownSum.subtract(right.paymentSum))) {
+                right.copy(mid);
             } else {
                 return null;
             }
-            ln_steps++;
-            if (ln_steps == 100) {
-                return null;
-            }
         }
-        return multiply(new BigDecimal(100), lr_iter_mid.rpsn).setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        return multiply(new BigDecimal(100), mid.rpsn).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     //
@@ -356,21 +352,21 @@ public class LoanSimulationAlgorithm {
 
     private static class RPSNCalculationIteration {
 
-        public BigDecimal payment_sum;
-        public BigDecimal drawdown_sum;
+        public BigDecimal paymentSum;
+        public BigDecimal drawdownSum;
         public BigDecimal rpsn;
 
         void copy(RPSNCalculationIteration iteration) {
-            this.payment_sum = iteration.payment_sum;
-            this.drawdown_sum = iteration.drawdown_sum;
+            this.paymentSum = iteration.paymentSum;
+            this.drawdownSum = iteration.drawdownSum;
             this.rpsn = iteration.rpsn;
         }
 
         @Override
         public String toString() {
             return "RPSNCalculationIteration{" +
-                    "payment_sum=" + payment_sum +
-                    ", drawdown_sum=" + drawdown_sum +
+                    "payment_sum=" + paymentSum +
+                    ", drawdown_sum=" + drawdownSum +
                     ", rpsn=" + rpsn +
                     '}';
         }
