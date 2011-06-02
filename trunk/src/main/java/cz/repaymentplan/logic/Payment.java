@@ -1,6 +1,7 @@
 package cz.repaymentplan.logic;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.joda.time.DateTime;
 
@@ -33,6 +34,10 @@ public class Payment {
         return dueDate;
     }
 
+    public Date getDueDateAsDate() {
+        return dueDate.toDate();
+    }
+
     public BigDecimal getInterest() {
         return interest;
     }
@@ -41,12 +46,24 @@ public class Payment {
         return interestFrom;
     }
 
+    public Date getInterestFromAsDate() {
+        return interestFrom.toDate();
+    }
+
     public DateTime getInterestTo() {
         return interestTo;
     }
 
+    public Date getInterestToAsDate() {
+        return interestTo.toDate();
+    }
+
     public DateTime getMaturityDate() {
         return maturityDate;
+    }
+
+    public Date getMaturityDateAsDate() {
+        return maturityDate.toDate();
     }
 
     public BigDecimal getOutstanding() {
