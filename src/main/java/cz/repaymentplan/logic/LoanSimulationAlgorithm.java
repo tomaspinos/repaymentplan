@@ -10,6 +10,7 @@ import cz.repaymentplan.logic.enums.InterestCorrectionType;
 import cz.repaymentplan.logic.enums.LastPaymentType;
 import cz.repaymentplan.logic.enums.PaymentPeriod;
 
+import static cz.repaymentplan.logic.BigDecimalUtils.SCALE;
 import static cz.repaymentplan.logic.BigDecimalUtils.ceil;
 import static cz.repaymentplan.logic.BigDecimalUtils.divide;
 import static cz.repaymentplan.logic.BigDecimalUtils.multiply;
@@ -237,8 +238,8 @@ public class LoanSimulationAlgorithm {
     public static BigDecimal getRPSN(DrawdownList it_drawdown,
                                      PaymentList it_payment,
                                      final DateTime id_start_drawdown,
-                                     Integer in_days_in_year,  // pocet dni v roku, povolene hodnoty 365, 365.25, 366 (znamena skutocny pocet dni v roku)
-                                     Integer in_precision) {
+                                     Integer in_days_in_year  // pocet dni v roku, povolene hodnoty 365, 365.25, 366 (znamena skutocny pocet dni v roku)
+                                     ) {
         // kontrola planov
         final RPSNCalculationIteration left = new RPSNCalculationIteration();
         final RPSNCalculationIteration right = new RPSNCalculationIteration();
@@ -283,10 +284,11 @@ public class LoanSimulationAlgorithm {
             }
         });
 
-        for (int ln_steps = 1; ln_steps <= 100; ln_steps++) {
+        for (int step = 1; step <= 100; step++) {
             mid.rpsn = divide(left.rpsn.add(right.rpsn), new BigDecimal(2));
-            if (mid.rpsn.setScale(in_precision, BigDecimal.ROUND_HALF_UP).equals(left.rpsn.setScale(in_precision, BigDecimal.ROUND_HALF_UP))
-                    || mid.rpsn.setScale(in_precision, BigDecimal.ROUND_HALF_UP).equals(right.rpsn.setScale(in_precision, BigDecimal.ROUND_HALF_UP))) {
+
+            if (isEqual(mid.rpsn.setScale(SCALE, BigDecimal.ROUND_HALF_UP), left.rpsn.setScale(SCALE, BigDecimal.ROUND_HALF_UP))
+                    || isEqual(mid.rpsn.setScale(SCALE, BigDecimal.ROUND_HALF_UP), right.rpsn.setScale(SCALE, BigDecimal.ROUND_HALF_UP))) {
                 break;
             }
 
@@ -331,11 +333,11 @@ public class LoanSimulationAlgorithm {
                                              BigDecimal in_periodic_fee,    // periodicky poplatok
                                              InterestCorrectionType interestCorrectionType, // 'ROUND' - urok zaokruhlit, 'TRUNC' - urok orezat, 'CEIL' - zarovnat nahor,
                                              // 'NONE' - urok neupravovat - vyuzit celu sirku typu number v oracle
-                                             LastPaymentType lastPaymentType,  // ako vypocitat anuitu : 'CALCULATED' - iba podla vzorca, poslednu splatku nijako neupravovat,
+                                             LastPaymentType lastPaymentType  // ako vypocitat anuitu : 'CALCULATED' - iba podla vzorca, poslednu splatku nijako neupravovat,
                                              // 'LEAST_DIFFERENCE' tak, aby bol rozdiel medzi riadnymi splatkami a poslednou minimalny,
                                              // 'LOWER_THAN_REGULAR_WITH_LEAST_DIFFERENCE' - tak aby posledna splatka bola vzdy nizsia ako
                                              // riadna anuita, ale aby rozdiel riadnej anuity a poslednej splatky bol minimalny
-                                             Integer in_precision) {
+                                             ) {
         Integer ln_due_day = (in_due_day != null) ? in_due_day : toDayPlusOne(id_drawdown_date);
         PaymentList paymentList = getRepaymentPlan(addDays(id_drawdown_date, 1),
                 ln_due_day, country, in_outstanding, in_interest_rate,
@@ -345,7 +347,7 @@ public class LoanSimulationAlgorithm {
                 lastPaymentType);
         DrawdownList drawdownList = new DrawdownList();
         drawdownList.add(new Drawdown(id_drawdown_date, in_outstanding));
-        BigDecimal rpsn = getRPSN(drawdownList, paymentList, id_drawdown_date, in_days_in_year, in_precision);
+        BigDecimal rpsn = getRPSN(drawdownList, paymentList, id_drawdown_date, in_days_in_year);
 
         return new LoanSimulation(paymentList, rpsn);
     }

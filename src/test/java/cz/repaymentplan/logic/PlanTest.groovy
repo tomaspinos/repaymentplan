@@ -22,7 +22,7 @@ class PlanTest extends AbstractContextTest {
     @Test
     void plan1() {
         def loan = loanSimulationAlgorithm.simulateSimpleLoan(date("16.05.2011"), 17, Country.CZE, new BigDecimal(500000), BigDecimal.TEN, 12,
-                PaymentPeriod.ONE_MONTH, 365, 360, BigDecimal.ZERO, InterestCorrectionType.CEIL, LastPaymentType.CALCULATED, 5)
+                PaymentPeriod.ONE_MONTH, 365, 360, BigDecimal.ZERO, InterestCorrectionType.CEIL, LastPaymentType.CALCULATED, 10)
 
         assertSimulation("/plan1.xml", loan)
     }
@@ -30,7 +30,7 @@ class PlanTest extends AbstractContextTest {
     @Test
     void plan2() {
         def loan = loanSimulationAlgorithm.simulateSimpleLoan(date("23.05.2011"), 24, Country.CZE, new BigDecimal(500000), BigDecimal.TEN, 12,
-                PaymentPeriod.ONE_MONTH, 365, 360, BigDecimal.ZERO, InterestCorrectionType.CEIL, LastPaymentType.LEAST_DIFFERENCE, 5)
+                PaymentPeriod.ONE_MONTH, 365, 360, BigDecimal.ZERO, InterestCorrectionType.CEIL, LastPaymentType.LEAST_DIFFERENCE, 10)
 
         assertSimulation("/plan2.xml", loan)
     }

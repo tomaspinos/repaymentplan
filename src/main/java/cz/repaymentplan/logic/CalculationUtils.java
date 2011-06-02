@@ -62,14 +62,7 @@ public class CalculationUtils {
     }
 
     public static boolean isEqual(BigDecimal a, BigDecimal b) {
-        if (a == null || b == null) {
-            return false;
-        }
-        return a.doubleValue() == b.doubleValue();
-    }
-
-    public static void raise_application_error(int i, String s) {
-        throw new IllegalStateException("Application error, " + i + ", " + s);
+        return !(a == null || b == null) && a.doubleValue() == b.doubleValue();
     }
 
     public static int getDayCountInYear(DateTime date) {

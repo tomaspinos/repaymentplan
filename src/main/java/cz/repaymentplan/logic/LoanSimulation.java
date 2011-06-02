@@ -7,16 +7,16 @@ import java.math.BigDecimal;
  */
 public class LoanSimulation {
 
-    private PaymentList paymentList;
+    private PaymentList payments;
     private BigDecimal rpsn;
 
-    public LoanSimulation(PaymentList paymentList, BigDecimal rpsn) {
-        this.paymentList = paymentList;
+    public LoanSimulation(PaymentList payments, BigDecimal rpsn) {
+        this.payments = payments;
         this.rpsn = rpsn;
     }
 
-    public PaymentList getPaymentList() {
-        return paymentList;
+    public PaymentList getPayments() {
+        return payments;
     }
 
     public BigDecimal getRpsn() {
