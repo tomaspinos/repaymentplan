@@ -1,139 +1,184 @@
 body {
-  font-family: Georgia, serif;
-  font-size: 0.8em;
-  color: #585858;
-  background-color: white;
-	text-align:center;
-	overflow: scroll;
+    font-family: Georgia, serif;
+    font-size: 0.8em;
+    color: #585858;
+    background-color: white;
+    text-align: center;
+    overflow: scroll;
 }
+
 a {
-  color: #585858;
+    color: #585858;
 }
+
 a:hover {
-  color: #3366FF;
+    color: #3366FF;
 }
+
 h1 {
-  border: 1px solid #C0C0C0;
-  padding: 0.5em 0.5em 0.5em 0.5em;
-  background-color: #7BA7FF;
+    border: 1px solid #C0C0C0;
+    padding: 0.5em 0.5em 0.5em 0.5em;
+    background-color: #7BA7FF;
 }
+
 h2 {
-  margin-bottom: 0.5em;
-  margin-top: 2em;
+    margin-bottom: 0.5em;
+    margin-top: 2em;
 }
+
 h1 span {
-  font-size: 0.5em;
+    font-size: 0.5em;
 }
+
 p {
-	line-height: 1.5em;
+    line-height: 1.5em;
 }
+
 dfn {
-	white-space: nowrap;
-	font-weight: bold;
+    white-space: nowrap;
+    font-weight: bold;
 }
+
 .dict {
-	border-bottom: 1px solid #C0C0C0;
-	font-size: 0.9em;
+    border-bottom: 1px solid #C0C0C0;
+    font-size: 0.9em;
 }
+
 .dict td {
-	vertical-align: top;
-  background-color: #F0F0F0;
-  border-top: 1px solid #C0C0C0;
-  padding: 0.5em 1em 1em 0.5em;
+    vertical-align: top;
+    background-color: #F0F0F0;
+    border-top: 1px solid #C0C0C0;
+    padding: 0.5em 1em 1em 0.5em;
 }
+
 .centered {
-	width: 60em;
-	margin:0px auto;
-	text-align:left;
+    width: 60em;
+    margin: 0px auto;
+    text-align: left;
 }
+
 .form {
-  border-top: 1px solid #C0C0C0;
-  border-bottom: 1px solid #C0C0C0;
+    border-top: 1px solid #C0C0C0;
+    border-bottom: 1px solid #C0C0C0;
 }
+
 .form, .plan {
-	width: 100%;
+    width: 100%;
 }
+
 .form td {
-  background-color: #F0F0F0;
-  padding: 4px;
-  text-align: right;
-  vertical-align: top;
-  border-bottom: 2px solid white;
-  border-left: 2px solid white;
+    background-color: #F0F0F0;
+    padding: 4px;
+    text-align: right;
+    vertical-align: top;
+    border-bottom: 2px solid white;
+    border-left: 2px solid white;
 }
+
 .form td.left {
-  border-left: 0;
+    border-left: 0;
 }
+
 .form td.button {
-  border-bottom: 0;
-  border-left: 0;
+    border-bottom: 0;
+    border-left: 0;
 }
+
 .form td.button INPUT {
-  margin: 5px;
+    margin: 5px;
 }
+
 .form td.button INPUT:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
+
 .plan {
-	font-family: Verdana, Arial, sans-serif;
-	font-size: 0.8em;
-  border-bottom: 1px solid #7BA7FF;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 0.8em;
+    border-bottom: 1px solid #7BA7FF;
 }
+
 .info {
-  font-size: 0.8em;
-  padding-right: 5px;
+    font-size: 0.8em;
+    padding-right: 5px;
 }
+
 .plan td {
-  background-color: #F0F0F0;
-  padding: 4px;
-	text-align: center;
-  vertical-align: top;
-  border-bottom: 2px solid white;
-  border-left: 2px solid white;
+    background-color: #F0F0F0;
+    padding: 4px;
+    text-align: center;
+    vertical-align: top;
+    border-bottom: 2px solid white;
+    border-left: 2px solid white;
 }
+
 .plan th {
-  background-color: #7BA7FF;
-  padding: 2px 5px 2px 5px;
-  font-weight: bold;
-	font-size: 0.9em;
-	text-align: center;
-  border-left: 2px solid white;
+    background-color: #7BA7FF;
+    padding: 2px 5px 2px 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+    text-align: center;
+    border-left: 2px solid white;
 }
+
 .plan th.left, .plan td.left {
-  border-left: 0;
+    border-left: 0;
 }
+
 .plan td.number {
-	text-align: right;
-	padding-right: 6px;
+    text-align: right;
+    padding-right: 6px;
 }
+
 .rpsn {
-	font-weight: bold;
-	border: 1px solid #C0C0C0;
-	padding: 5px;
+    font-weight: bold;
+    border: 1px solid #C0C0C0;
+    padding: 5px;
 }
+
 .links {
-	font-family: Verdana, Arial, sans-serif;
-	width: 100%;
-	font-size: 0.8em;
-	margin-top: 2em;
-	border-top: 1px solid #C0C0C0;
-	padding-top: 3px;
+    font-family: Verdana, Arial, sans-serif;
+    width: 100%;
+    font-size: 0.8em;
+    margin-top: 2em;
+    border-top: 1px solid #C0C0C0;
+    padding-top: 3px;
 }
+
 .links td {
-	vertical-align: top;
+    vertical-align: top;
 }
+
 .backlinks {
-	font-family: Verdana, Arial, sans-serif;
-	width: 100%;
-	font-size: 0.6em;
-	margin-top: 2em;
+    font-family: Verdana, Arial, sans-serif;
+    width: 100%;
+    font-size: 0.6em;
+    margin-top: 2em;
 }
+
 .inv img {
-	width: 0;
-	height: 0;
+    width: 0;
+    height: 0;
 }
-.share{
-	margin-bottom: 15px;
+
+.share {
+    margin-bottom: 15px;
 }
-a.stbar.chicklet img {border:0;height:16px;width:16px;margin-right:3px;vertical-align:middle;}
-a.stbar.chicklet {height:16px;line-height:16px;text-decoration: none;}
+
+a.stbar.chicklet img {
+    border: 0;
+    height: 16px;
+    width: 16px;
+    margin-right: 3px;
+    vertical-align: middle;
+}
+
+a.stbar.chicklet {
+    height: 16px;
+    line-height: 16px;
+    text-decoration: none;
+}
+
+.errors {
+    color: red;
+}

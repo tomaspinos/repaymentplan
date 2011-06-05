@@ -48,10 +48,6 @@ public class ApplicationController {
     @RequestMapping(value = "/showPlan.do", method = RequestMethod.POST)
     public String calculatePlan(@Valid @ModelAttribute("form") PlanForm form, BindingResult result) {
         if (result.hasErrors()) {
-            for (ObjectError error : result.getAllErrors()) {
-                System.out.println("error = " + error);
-            }
-
             return "plan";
         }
 
