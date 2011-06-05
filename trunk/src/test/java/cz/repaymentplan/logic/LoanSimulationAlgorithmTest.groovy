@@ -21,8 +21,18 @@ class LoanSimulationAlgorithmTest extends AbstractContextTest {
     }
 
     @Test
-    void getMaturityDate() throws Exception {
+    void getMaturityDate_17_06_2011() throws Exception {
         Assert.assertEquals(dt("17.06.2011"), loanSimulationAlgorithm.getMaturityDate(dt("17.06.2011"), Country.CZE));
+    }
+
+    @Test
+    void getMaturityDate_24_12_2011() throws Exception {
+        Assert.assertEquals(dt("23.12.2011"), loanSimulationAlgorithm.getMaturityDate(dt("24.12.2011"), Country.CZE));
+    }
+
+    @Test
+    void getMaturityDate_24_12_2012() throws Exception {
+        Assert.assertEquals(dt("21.12.2012"), loanSimulationAlgorithm.getMaturityDate(dt("24.12.2012"), Country.CZE));
     }
 
     private static DateTime dt(String text) {

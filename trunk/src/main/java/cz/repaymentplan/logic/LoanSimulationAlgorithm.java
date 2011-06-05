@@ -66,10 +66,10 @@ public class LoanSimulationAlgorithm {
     //
     // pre zadany DueDate urci datum splatnosti. plati pravidlo, ze datum splatnosti je due date, ak je nepracovny, tak je datum splatnosti najblizsi predosly pracovny
     // den, okrem pripadu, kedy by predchadzajuci pracovny den bol v predchadzajucom mesiaci. v tom pripade je to najbliszi nasledujuci pracovny den
-    public DateTime getMaturityDate(DateTime id_due_date,
-                                    Country country) {
+    public DateTime getMaturityDate(DateTime id_due_date, Country country) {
         DateTime ld_work_date;
         DateTime ld_maturity_date = truncDD(id_due_date);
+
         while (true) {
             ld_work_date = getNearestWorkingDate(ld_maturity_date, country, workdayChecker);
             if (ld_work_date.equals(ld_maturity_date)) {
@@ -77,6 +77,7 @@ public class LoanSimulationAlgorithm {
             }
             ld_maturity_date = addDays(ld_maturity_date, -1);
         }
+
         if (truncMM(ld_maturity_date).equals(truncMM(id_due_date))) {
             return ld_maturity_date;
         } else {

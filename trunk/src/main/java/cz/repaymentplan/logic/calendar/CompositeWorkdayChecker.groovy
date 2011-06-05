@@ -18,8 +18,12 @@ class CompositeWorkdayChecker implements WorkdayChecker {
 
         def result = resultCache[cacheKey]
         if (!result) {
-            result = null != checkers.find { checker -> checker.isWorkday(country, date) }
+            result = true
+
+            checkers.each { checker -> result &= checker.isWorkday(country, date) }
+
             resultCache[cacheKey] = result
+
             result
         }
 

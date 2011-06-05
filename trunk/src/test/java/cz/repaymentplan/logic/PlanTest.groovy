@@ -63,8 +63,8 @@ class PlanTest extends AbstractContextTest {
     def assertPayment(Payment expected, Payment actual) {
         assertEquals("interest from", expected.interestFrom, actual.interestFrom)
         assertEquals("interest to", expected.interestTo, actual.interestTo)
-//        assertEquals(expected.dueDate, actual.dueDate)
-//        assertEquals(expected.maturityDate, actual.maturityDate)
+        assertEquals(expected.dueDate, actual.dueDate)
+        assertEquals(expected.maturityDate, actual.maturityDate)
         assertEquals("payment", expected.payment.doubleValue(), actual.payment.doubleValue(), 0d)
         assertEquals("interest", expected.interest.doubleValue(), actual.interest.doubleValue(), 0d)
         assertEquals("principal", expected.principal.doubleValue(), actual.principal.doubleValue(), 0d)
