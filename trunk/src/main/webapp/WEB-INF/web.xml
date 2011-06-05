@@ -28,6 +28,11 @@
         <url-pattern>*.do</url-pattern>
     </servlet-mapping>
 
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+
     <welcome-file-list>
         <welcome-file>
             index.jsp

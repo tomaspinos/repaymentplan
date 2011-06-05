@@ -54,9 +54,15 @@
 
     <form:form commandName="form">
 
-        <div>
-            <form:errors path="*"/>
-        </div>
+        <spring:hasBindErrors name="form">
+            <div class="errors">
+                <br/>
+                <form:errors path="*"/>
+                <br/>
+                <br/>
+                <br/>
+            </div>
+        </spring:hasBindErrors>
 
         <table class="form" cellspacing="0" cellpadding="0" border="0">
             <tr>

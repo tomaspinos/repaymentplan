@@ -22,7 +22,7 @@ class PlanTest extends AbstractContextTest {
     @Test
     void plan1() {
         def loan = loanSimulationAlgorithm.simulateSimpleLoan(date("16.05.2011"), 17, Country.CZE, new BigDecimal(500000), BigDecimal.TEN, 12,
-                PaymentPeriod.ONE_MONTH, 365, 360, BigDecimal.ZERO, InterestCorrectionType.CEIL, LastPaymentType.CALCULATED, 10)
+                PaymentPeriod.ONE_MONTH, 365, 360, BigDecimal.ZERO, InterestCorrectionType.CEIL, LastPaymentType.CALCULATED)
 
         assertSimulation("/plan1.xml", loan)
     }
@@ -30,23 +30,31 @@ class PlanTest extends AbstractContextTest {
     @Test
     void plan2() {
         def loan = loanSimulationAlgorithm.simulateSimpleLoan(date("23.05.2011"), 24, Country.CZE, new BigDecimal(500000), BigDecimal.TEN, 12,
-                PaymentPeriod.ONE_MONTH, 365, 360, BigDecimal.ZERO, InterestCorrectionType.CEIL, LastPaymentType.LEAST_DIFFERENCE, 10)
+                PaymentPeriod.ONE_MONTH, 365, 360, BigDecimal.ZERO, InterestCorrectionType.CEIL, LastPaymentType.LEAST_DIFFERENCE)
 
         assertSimulation("/plan2.xml", loan)
+    }
+
+    @Test
+    void plan_9500000_24() {
+        def loan = loanSimulationAlgorithm.simulateSimpleLoan(date("6.6.2011"), 24, Country.CZE, new BigDecimal(9500000), new BigDecimal(13), 120,
+                PaymentPeriod.ONE_MONTH, 365, 360, new BigDecimal(500), InterestCorrectionType.CEIL, LastPaymentType.CALCULATED)
+
+        assertSimulation("/plan_9500000_24.xml", loan)
     }
 
     def assertSimulation(String resource, LoanSimulation loan) {
         def plan = new XmlSlurper().parseText(new File(PlanTest.getResource(resource).toURI()).text)
         def expectedPayments = readPayments(plan.payments)
 
-        assertPayments(expectedPayments, loan.paymentList)
+        assertPayments(expectedPayments, loan.payments)
         assertEquals("rpsn", readRPSN(plan.rpsn), loan.rpsn)
     }
 
     def assertPayments(PaymentList expected, PaymentList actual) {
         assertEquals(expected.size(), actual.size())
-        def expectedPayments = expected.getList().toArray()
-        def actualPayments = actual.getList().toArray()
+        def expectedPayments = expected.toArray()
+        def actualPayments = actual.toArray()
         for (int i = 0; i < expected.size(); i++) {
             assertPayment(expectedPayments[i], actualPayments[i])
         }
