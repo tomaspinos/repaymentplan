@@ -15,11 +15,19 @@ import cz.repaymentplan.logic.enums.Country;
 public class CalculationUtils {
 
     public static DateTime addMonths(DateTime date, int months) {
-        return date.plusMonths(months);
+        if (months > 0) {
+            return date.plusMonths(months);
+        } else {
+            return date.minusMonths(Math.abs(months));
+        }
     }
 
     public static DateTime addDays(DateTime date, int days) {
-        return date.plusDays(days);
+        if (days > 0) {
+            return date.plusDays(days);
+        } else {
+            return date.minusDays(Math.abs(days));
+        }
     }
 
     public static DateTime lastDay(DateTime date) {
