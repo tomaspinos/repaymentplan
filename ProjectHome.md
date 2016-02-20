@@ -1,0 +1,1 @@
+Generator of repayment plans for retail loan products (web application)
